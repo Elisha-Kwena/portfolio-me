@@ -1,35 +1,19 @@
-const nodemailer = require('nodemailer');
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request) {
   try {
     const { email, message, name } = await request.json();
-    
-    console.log('📧 FORM DATA:', { email, name, message: message.substring(0, 50) + '...' });
 
-    // CHECK ENV
-    if (!process.env.EMAIL_PASSWORD) {
-      console.error('❌ EMAIL_PASSWORD MISSING');
+    console.log('📧 FORM DATA:', { email, name });
+
+    if (!process.env.RESEND_API_KEY) {
       return Response.json({ success: false, message: 'Server error' }, { status: 500 });
     }
 
-    // CREATE TRANSPORTER - FIXED SYNTAX
-    const transporter = nodemailer.createTransporter({
-      service: 'gmail',
-      auth: {
-        user: 'elishakwena@gmail.com',
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
-
-    console.log('🔗 SMTP Setup Complete');
-
-    // VERIFY CONNECTION
-    await transporter.verify();
-    console.log('✅ SMTP Connected Successfully');
-
-    // SEND EMAIL
-    await transporter.sendMail({
-      from: '"Elisha Kwena" <elishakwena@gmail.com>',
+    await resend.emails.send({
+      from: 'Elisha Kwena <elishakwena@portfolio.com>',
       to: 'elishakwena@gmail.com',
       subject: `Portfolio Contact: ${name}`,
       html: `
@@ -51,23 +35,18 @@ export async function POST(request) {
       `,
     });
 
-    console.log('✅ EMAIL SENT SUCCESSFULLY');
+    console.log('✅ EMAIL SENT VIA RESEND');
 
     return Response.json({ 
       success: true, 
-      message: 'Message sent successfully! Check your email.' 
+      message: 'Message sent successfully!' 
     });
 
   } catch (error) {
-    console.error('🚨 DETAILED ERROR:', {
-      message: error.message,
-      code: error.code,
-      response: error.response
-    });
-
+    console.error('🚨 RESEND ERROR:', error.message);
     return Response.json({ 
       success: false, 
-      message: 'Failed to send email. Please try again.' 
+      message: 'Failed to send email' 
     }, { status: 500 });
   }
 }
