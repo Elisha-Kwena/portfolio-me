@@ -1,6 +1,6 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "elisha-portfolio",
+  "short_name": "elisha-portfolio",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
