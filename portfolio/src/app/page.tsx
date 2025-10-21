@@ -51,7 +51,7 @@ export default function Home() {
               <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
                 <div className="md:w-[400px] h-[400px] bg-linear-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mx-auto relative overflow-hidden">
                   <Image
-                    src="/images/me.jpg"
+                    src="/images/elisha.png"
                     alt="Elisha Kwena"
                     fill
                     className="object-cover object-top rounded-full"
